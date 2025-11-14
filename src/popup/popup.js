@@ -1,4 +1,3 @@
-// Получаем текущий URL
 async function getCurrentTabUrl() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab.url;
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (response?.success) {
         status.textContent = "✅ Ссылка сохранена в Wishlist!";
       } else {
-        status.textContent = "⚠️ Ошибка при сохранении.";
+        status.textContent = "⚠️ Ошибка при сохранении: " + (response?.error || "");
       }
     });
   });

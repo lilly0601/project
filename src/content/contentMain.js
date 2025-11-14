@@ -11,3 +11,15 @@
 // }
 
 // createApp(MyButton).mount(container);
+import { createApp } from 'vue';
+import MyButton from '../components/MyButton.vue';
+
+let container = document.getElementById("my-vue-button-container");
+
+if (!container) {
+  container = document.createElement("div");
+  container.id = "my-vue-button-container";
+  document.body.appendChild(container);
+}
+
+createApp(MyButton).mount(container);
