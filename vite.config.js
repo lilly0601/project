@@ -8,8 +8,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        popup: resolve(__dirname, 'src/popup/popup.js'),
-        content: resolve(__dirname, 'src/content/contentMain.js')
+        popup: resolve(__dirname, 'index.html'),
+        ackground: resolve(__dirname, 'public/background/background.js'),
+        content: resolve(__dirname, 'public/content/content.js')
       },
       output: {
         entryFileNames: 'assets/[name].js',
@@ -20,3 +21,5 @@ export default defineConfig({
     outDir: 'dist'
   }
 })
+
+

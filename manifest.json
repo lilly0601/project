@@ -4,15 +4,15 @@
   "version": "1.0.0",
   "description": "Расширение для сохранения желаемых товаров 💖",
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "index.html",
     "default_icon": {
-      "16": "public/16.png",
-      "48": "public/48.png",
-      "128": "public/128.png"
+      "16": "16.png",
+      "48": "48.png",
+      "128": "128.png"
     }
   },
   "background": {
-  "service_worker": "src/background/background.js",
+  "service_worker": "background/background.js",
   "type": "module"
   },
   "permissions": ["storage", "tabs", "activeTab", "scripting"],
@@ -20,7 +20,7 @@
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
-      "js": ["src/content/content.js"],
+      "js": ["content/content.js"],
       "run_at": "document_idle"
     }
   ]

@@ -1,47 +1,71 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div>
+    <CategoriesList
+      v-if="view === 'categories'"
+      :categories="categories"
+      @openCategory="openCategory"
+    />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <WishlistItems
+      v-if="view === 'items'"
+      :category="currentCategory"
+      :items="filteredItems"
+      @back="view = 'categories'"
+    />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script>
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+import CategoriesList from "./components/CategoriesList.vue";
+import WishlistItems from "./components/WishlistItems.vue";
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+
+export default {
+  components: { CategoriesList, WishlistItems },
+
+  data() {
+    return {
+      wishlist: [],
+      categories: [],
+      view: "categories",
+      currentCategory: null,
+    };
+  },
+
+  async mounted() {
+    this.wishlist = await new Promise(resolve => {
+      chrome.runtime.sendMessage({ action: "getWishlist" }, resolve);
+    });
+
+    this.buildCategories();
+  },
+
+  methods: {
+    buildCategories() {
+      const map = {};
+
+      this.wishlist.forEach(item => {
+        if (!map[item.category]) map[item.category] = 0;
+        map[item.category]++;
+      });
+
+      this.categories = Object.keys(map).map(key => ({
+        name: key,
+        count: map[key],
+      }));
+    },
+
+    openCategory(name) {
+      this.currentCategory = name;
+      this.view = "items";
+    },
+  },
+
+  computed: {
+    filteredItems() {
+      return this.wishlist.filter(i => i.category === this.currentCategory);
+    }
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+};
+</script>
